@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import reactor.core.publisher.Flux;
 
 @Configuration
 public class DispatchingFunctions {
@@ -18,5 +19,13 @@ public class DispatchingFunctions {
           orderAcceptedMessage.orderId());
       return orderAcceptedMessage.orderId();
     };
+  }
+
+  @Bean
+  public Function<Flux<Long>, Flux<OrderDispatchedMessage>> label() {
+    return orderFlux -> orderFlux.map(orderId -> {
+      log.info("The order with id {} is labeled.", orderId);
+      return new OrderDispatchedMessage(orderId);
+    });
   }
 }

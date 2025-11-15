@@ -15,7 +15,7 @@ public class DispatchingFunctions {
   @Bean
   public Function<OrderAcceptedMessage, Long> pack() {
     return orderAcceptedMessage -> {
-      log.info("The order with id {} is packed.",
+      log.info("The order with id={} is packed.",
           orderAcceptedMessage.orderId());
       return orderAcceptedMessage.orderId();
     };
@@ -24,7 +24,7 @@ public class DispatchingFunctions {
   @Bean
   public Function<Flux<Long>, Flux<OrderDispatchedMessage>> label() {
     return orderFlux -> orderFlux.map(orderId -> {
-      log.info("The order with id {} is labeled.", orderId);
+      log.info("The order with id={} is labeled.", orderId);
       return new OrderDispatchedMessage(orderId);
     });
   }
